@@ -169,10 +169,10 @@ const About = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
-                className="flex gap-6 sm:gap-10 relative pb-12 last:pb-0"
+                className="flex gap-3 sm:gap-10 relative pb-10 sm:pb-12 last:pb-0"
               >
                 <div className="flex flex-col items-center">
-                  <span className="font-display text-gold text-xl shrink-0 w-16 text-right pr-2">
+                  <span className="font-display text-gold text-base sm:text-xl shrink-0 w-11 sm:w-16 text-right pr-1 sm:pr-2">
                     {m.year}
                   </span>
                 </div>
@@ -182,8 +182,8 @@ const About = () => {
                     <span className="w-px flex-1 bg-gold/20 mt-2" />
                   )}
                 </div>
-                <div className="pb-2">
-                  <h3 className="font-display text-xl sm:text-2xl text-cream mb-2">
+                <div className="pb-2 min-w-0">
+                  <h3 className="font-display text-lg sm:text-2xl text-cream mb-1.5 sm:mb-2">
                     {m.title}
                   </h3>
                   <p className="text-cream-faint text-sm font-light leading-relaxed max-w-md">

@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Check, ArrowRight } from "lucide-react";
 import { whatsappLink } from "../data/siteConfig";
-import balKrishna from "../assets/images/artworks/bal-krishna.png";
-import sariPortraitBloodArt from "../assets/images/artworks/maharana-pratap.png";
+import balKrishna from "../assets/images/artworks/bal-krishna.jpg";
+import sariPortraitBloodArt from "../assets/images/artworks/sari-portrait-blood-art.jpg";
 
 const inclusions = [
   "Free initial consultation call",

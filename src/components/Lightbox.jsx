@@ -3,15 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { whatsappLink } from "../data/siteConfig";
 
+const SWIPE_THRESHOLD = 50;
+
 const Lightbox = ({ artwork, artworks, onClose, onNavigate }) => {
   const touchStartX = useRef(null);
-  const touchEndX = useRef(null);
 
   const currentIndex = artwork
     ? artworks.findIndex((a) => a.id === artwork.id)
     : -1;
-
-  const totalArtworks = artworks?.length || 0;
 
   const goNext = useCallback(() => {
     if (currentIndex === -1) return;
@@ -26,51 +25,37 @@ const Lightbox = ({ artwork, artworks, onClose, onNavigate }) => {
     onNavigate(prev);
   }, [currentIndex, artworks, onNavigate]);
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (
-      touchStartX.current === null ||
-      touchEndX.current === null
-    )
-      return;
-
-    const distance = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 60;
-
-    if (distance > minSwipeDistance) {
-      goNext();
-    } else if (distance < -minSwipeDistance) {
-      goPrev();
-    }
-
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
-
   useEffect(() => {
     if (!artwork) return;
-
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") goNext();
       if (e.key === "ArrowLeft") goPrev();
     };
-
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
   }, [artwork, onClose, goNext, goPrev]);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
+      if (deltaX > 0) {
+        goPrev();
+      } else {
+        goNext();
+      }
+    }
+    touchStartX.current = null;
+  };
 
   return (
     <AnimatePresence>
@@ -79,163 +64,152 @@ const Lightbox = ({ artwork, artworks, onClose, onNavigate }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden"
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100] bg-ink/95 backdrop-blur-md flex items-center justify-center p-0 sm:p-6 lg:p-8"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
           aria-label={`${artwork.title} preview`}
         >
-          {/* Close Button */}
+          {/* Close button — always reachable, sits above the image on mobile */}
           <button
             onClick={onClose}
             aria-label="Close preview"
-            className="absolute top-3 right-3 sm:top-5 sm:right-5 z-50 w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/15 text-gold hover:bg-gold hover:text-emerald-deep transition-all duration-300 shadow-xl"
+            className="absolute top-3 right-3 sm:top-6 sm:right-6 lg:top-8 lg:right-8 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center border border-gold/40 bg-ink/70 sm:bg-transparent text-gold hover:bg-gold hover:text-emerald-deep transition-all duration-300 z-20"
           >
-            <X size={20} />
+            <X size={18} className="sm:w-5 sm:h-5" />
           </button>
 
-          {/* Counter */}
-          <div className="absolute top-4 left-4 sm:top-5 sm:left-5 z-40 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-cream text-xs sm:text-sm tracking-wide">
-            {currentIndex + 1} / {totalArtworks}
-          </div>
-
-          {/* Previous */}
+          {/* Prev/Next — desktop: edges of screen. Mobile: handled by swipe + bottom dots */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               goPrev();
             }}
             aria-label="Previous artwork"
-            className="absolute left-2 sm:left-4 lg:left-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/15 text-gold hover:bg-gold hover:text-emerald-deep transition-all duration-300 shadow-xl"
+            className="hidden md:flex absolute left-5 lg:left-10 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center border border-gold/30 text-gold hover:bg-gold hover:text-emerald-deep transition-all duration-300 z-10"
           >
             <ChevronLeft size={22} />
           </button>
-
-          {/* Next */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               goNext();
             }}
             aria-label="Next artwork"
-            className="absolute right-2 sm:right-4 lg:right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/15 text-gold hover:bg-gold hover:text-emerald-deep transition-all duration-300 shadow-xl"
+            className="hidden md:flex absolute right-5 lg:right-10 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center border border-gold/30 text-gold hover:bg-gold hover:text-emerald-deep transition-all duration-300 z-10"
           >
             <ChevronRight size={22} />
           </button>
 
-          {/* Main Card */}
           <motion.div
             key={artwork.id}
-            initial={{ opacity: 0, y: 20, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.98, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98 }}
-            transition={{
-              duration: 0.35,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
             onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            className="w-full max-w-7xl h-[96vh] sm:h-[94vh] bg-emerald-rich/95 backdrop-blur-xl border border-gold/15 rounded-2xl overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.5)] grid grid-cols-1 lg:grid-cols-[1.45fr_0.95fr]"
+            className="w-full h-[100svh] sm:h-auto sm:max-h-[90vh] max-w-5xl grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] bg-emerald-rich sm:border border-gold/20 shadow-frame overflow-hidden"
           >
-            {/* Image Area */}
-            <div className="relative bg-ink flex items-center justify-center p-3 sm:p-5 md:p-8 h-[45vh] sm:h-[52vh] lg:h-full">
+            {/* Image area */}
+            <div className="relative bg-ink flex items-center justify-center h-[44svh] sm:h-auto sm:max-h-[55vh] lg:max-h-[90vh] shrink-0">
               <img
                 src={artwork.image}
                 alt={`${artwork.title} — full preview`}
-                loading="eager"
-                className="max-w-full max-h-full object-contain select-none"
-                draggable="false"
+                className="w-full h-full object-contain"
+                draggable={false}
               />
+
+              {/* Mobile-only nav controls, overlaid on the image */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goPrev();
+                }}
+                aria-label="Previous artwork"
+                className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-ink/60 border border-gold/30 text-gold active:bg-gold active:text-emerald-deep transition-colors z-10"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goNext();
+                }}
+                aria-label="Next artwork"
+                className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-ink/60 border border-gold/30 text-gold active:bg-gold active:text-emerald-deep transition-colors z-10"
+              >
+                <ChevronRight size={18} />
+              </button>
+
+              {/* Position dots — visible on all sizes, doubles as progress indicator on mobile */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 md:hidden">
+                {artworks.map((a) => (
+                  <span
+                    key={a.id}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      a.id === artwork.id ? "w-5 bg-gold" : "w-1.5 bg-gold/30"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* Details Panel */}
-            <div
-              className="overflow-y-auto px-5 py-5 sm:px-7 sm:py-7 lg:px-8 lg:py-8 flex flex-col"
-              style={{
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-              }}
-            >
-              <style>
-                {`
-                  .lightbox-scroll::-webkit-scrollbar {
-                    display: none;
-                  }
-                `}
-              </style>
+            {/* Details panel — scrolls independently if content is tall */}
+            <div className="p-5 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-5 overflow-y-auto flex-1 min-h-0">
+              <div className="flex items-center gap-3">
+                <span className="gold-line" />
+                <span className="eyebrow">{artwork.categoryLabel}</span>
+              </div>
+              <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl text-cream leading-tight">
+                {artwork.title}
+              </h3>
+              <p className="text-cream-faint font-light leading-relaxed text-sm sm:text-base">
+                {artwork.description}
+              </p>
 
-              <div className="lightbox-scroll flex flex-col h-full">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="gold-line" />
-                  <span className="eyebrow">
-                    {artwork.categoryLabel}
-                  </span>
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gold/10 mt-2">
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest2 text-gold">
+                    Medium
+                  </p>
+                  <p className="text-cream-dim text-sm mt-1">{artwork.medium}</p>
                 </div>
-
-                <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl text-cream leading-tight">
-                  {artwork.title}
-                </h3>
-
-                <p className="mt-4 text-cream-faint font-light leading-relaxed text-sm sm:text-base">
-                  {artwork.description}
-                </p>
-
-                <div className="grid grid-cols-2 gap-4 sm:gap-5 mt-6 pt-6 border-t border-gold/10">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold">
-                      Medium
-                    </p>
-                    <p className="text-cream-dim text-sm mt-1.5 leading-relaxed">
-                      {artwork.medium}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold">
-                      Year
-                    </p>
-                    <p className="text-cream-dim text-sm mt-1.5">
-                      {artwork.year}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold">
-                      Size
-                    </p>
-                    <p className="text-cream-dim text-sm mt-1.5">
-                      {artwork.size}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold">
-                      Status
-                    </p>
-                    <p className="text-cream-dim text-sm mt-1.5">
-                      Available on Request
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest2 text-gold">
+                    Year
+                  </p>
+                  <p className="text-cream-dim text-sm mt-1">{artwork.year}</p>
                 </div>
-
-                <div className="mt-auto pt-6">
-                  <a
-                    href={whatsappLink(
-                      `Hello Sandeep, I'm interested in "${artwork.title}". Could you share more details?`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-gold w-full min-h-[52px] flex items-center justify-center gap-2 text-center shadow-lg"
-                    aria-label={`Enquire about ${artwork.title} on WhatsApp`}
-                  >
-                    <MessageCircle size={18} />
-                    Enquire on WhatsApp
-                  </a>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest2 text-gold">
+                    Size
+                  </p>
+                  <p className="text-cream-dim text-sm mt-1">{artwork.size}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest2 text-gold">
+                    Status
+                  </p>
+                  <p className="text-cream-dim text-sm mt-1">
+                    Available on Request
+                  </p>
                 </div>
               </div>
+
+              <a
+                href={whatsappLink(
+                  `Hello Sandeep, I'm interested in "${artwork.title}". Could you share more details?`
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-gold mt-2 w-full"
+              >
+                <MessageCircle size={16} />
+                Enquire on WhatsApp
+              </a>
             </div>
           </motion.div>
         </motion.div>

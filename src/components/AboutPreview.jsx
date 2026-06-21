@@ -21,10 +21,10 @@ const AboutPreview = () => {
               className="w-full h-full object-cover shadow-frame border border-gold/15"
             />
           </div>
-          <div className="absolute -bottom-6 -right-6 bg-gold text-emerald-deep px-6 py-4 flex items-center gap-3 shadow-gold-lg">
-            <Award size={22} />
+          <div className="absolute -bottom-5 right-2 sm:-bottom-6 sm:-right-6 bg-gold text-emerald-deep px-5 py-3.5 sm:px-6 sm:py-4 flex items-center gap-3 shadow-gold-lg">
+            <Award size={20} className="sm:w-[22px] sm:h-[22px]" />
             <div className="leading-tight">
-              <p className="font-display text-lg font-semibold">6+ Years</p>
+              <p className="font-display text-base sm:text-lg font-semibold">6+ Years</p>
               <p className="text-xs">of Practice</p>
             </div>
           </div>

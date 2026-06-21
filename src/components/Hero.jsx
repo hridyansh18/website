@@ -93,9 +93,9 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="absolute -bottom-6 -left-6 sm:-bottom-8 sm:-left-8 bg-emerald-rich border border-gold/30 px-6 py-4 shadow-frame max-w-[210px]"
+            className="absolute -bottom-4 left-2 right-2 sm:right-auto sm:-bottom-8 sm:-left-8 bg-emerald-rich border border-gold/30 px-5 py-3.5 sm:px-6 sm:py-4 shadow-frame sm:max-w-[210px]"
           >
-            <p className="font-display text-gold text-lg italic leading-tight">
+            <p className="font-display text-gold text-base sm:text-lg italic leading-tight">
               "Where Every Stroke Tells a Story"
             </p>
             <p className="text-cream-faint text-xs mt-1 font-light">
