@@ -11,6 +11,10 @@ import sariPortraitBloodArt from "../assets/images/artworks/sari-portrait-blood-
 import hanumanDivine from "../assets/images/artworks/hanumanji.png";
 import gracefulSmile from "../assets/images/artworks/girl.png";
 import kaliPainting from "../assets/images/artworks/kali-mata.png";
+import radhaPortrait from "../assets/images/artworks/radha.png";
+import timelessStrength from "../assets/images/artworks/sketck.png";
+
+
 
 export const categories = [
   { id: "all", label: "All Works" },
@@ -88,7 +92,7 @@ export const artworks = [
       "An intimate sepia-toned portrait created using the studio's signature blood pigment technique, capturing warmth and likeness in a single unrepeatable medium.",
   },
   {
-  id: 3,
+  id: 6,
   title: "Fierce Goddess Kali",
   category: "canvas",
   categoryLabel: "Canvas Paintings",
@@ -99,6 +103,32 @@ export const artworks = [
   orientation: "portrait",
   description:
     "A powerful depiction of Goddess Kali, embodying divine energy and transformation. Bold colors, expressive features, and ornate embellishments create a striking visual representation of strength and protection.",
+},{
+  id: 7,
+  title: "Radha in Divine Grace",
+  category: "canvas",
+  categoryLabel: "Canvas Paintings",
+  medium: "Acrylic on Canvas",
+  year: "2024",
+  size: "20in x 24in",
+  image: radhaPortrait,
+  orientation: "portrait",
+  description:
+    "A serene portrayal inspired by Radha, highlighted with subtle blue tones and elegant ornamentation. The artwork radiates beauty, devotion, and timeless spiritual charm.",
+},
+
+{
+  id: 9,
+  title: "Timeless Strength",
+  category: "pencil-sketch",
+  categoryLabel: "Pencil Sketches",
+  medium: "Charcoal & Graphite on Paper",
+  year: "2024",
+  size: "14in x 18in",
+  image: timelessStrength,
+  orientation: "portrait",
+  description:
+    "A heartfelt monochrome portrait reflecting resilience, wisdom, and grace. Detailed shading and realistic textures bring authenticity and emotional depth to the artwork.",
 },
 ];
 
