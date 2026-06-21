@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 import Logo from "./Logo";
-import { InstagramIcon, FacebookIcon, YoutubeIcon } from "./SocialIcons";
+import { InstagramIcon, YoutubeIcon } from "./SocialIcons";
 import { siteConfig } from "../data/siteConfig";
+import { categories } from "../data/artworks";
 
 const socialLinks = [
   { Icon: InstagramIcon, label: "Instagram", href: siteConfig.instagramUrl },
-  { Icon: FacebookIcon, label: "Facebook", href: "#" },
-  { Icon: YoutubeIcon, label: "YouTube", href: "#" },
+  { Icon: YoutubeIcon, label: "YouTube", href: siteConfig.youtubeUrl },
 ];
 
 const Footer = () => {
@@ -72,11 +72,11 @@ const Footer = () => {
           <div className="md:col-span-2 flex flex-col gap-4">
             <h4 className="eyebrow !text-cream">Categories</h4>
             <ul className="flex flex-col gap-3 text-sm text-cream-faint font-light">
-              <li>Portraits</li>
-              <li>Religious Art</li>
-              <li>Blood Art</li>
-              <li>Canvas Paintings</li>
-              <li>Pencil Sketches</li>
+              {categories
+                .filter((c) => c.id !== "all")
+                .map((c) => (
+                  <li key={c.id}>{c.label}</li>
+                ))}
             </ul>
           </div>
 

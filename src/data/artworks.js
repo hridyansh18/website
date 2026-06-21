@@ -18,7 +18,6 @@ import timelessStrength from "../assets/images/artworks/timeless-strength.jpg";
 
 export const categories = [
   { id: "all", label: "All Works" },
-  { id: "portraits", label: "Portraits" },
   { id: "religious", label: "Religious Art" },
   { id: "blood-art", label: "Blood Art" },
   { id: "canvas", label: "Canvas Paintings" },

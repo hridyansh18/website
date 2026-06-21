@@ -18,6 +18,7 @@ export const siteConfig = {
 
   instagramHandle: "@sandeep_arts01",
   instagramUrl: "https://instagram.com/sandeep_arts01",
+  youtubeUrl: "https://www.youtube.com/@Sandeeparts01",
 
   address: {
     line1: "Nehru Nagar, Road No 08",
@@ -32,3 +33,8 @@ export const siteConfig = {
 
 export const whatsappLink = (message) =>
   `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+export const mailtoLink = (subject, body) =>
+  `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;

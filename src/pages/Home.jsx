@@ -1,6 +1,7 @@
 import Hero from "../components/Hero";
 import FeaturedGallery from "../components/FeaturedGallery";
 import CommissionSection from "../components/CommissionSection";
+import PricingSection from "../components/PricingSection";
 import ProcessSection from "../components/ProcessSection";
 import Testimonials from "../components/Testimonials";
 import AboutPreview from "../components/AboutPreview";
@@ -12,6 +13,7 @@ const Home = () => {
       <Hero />
       <FeaturedGallery />
       <CommissionSection />
+      <PricingSection />
       <ProcessSection />
       <Testimonials />
       <AboutPreview />

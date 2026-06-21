@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle2, User, Mail, Phone, MessageSquare } from "lucide-react";
-import { whatsappLink } from "../data/siteConfig";
+import { whatsappLink, mailtoLink } from "../data/siteConfig";
 
 const initialState = {
   name: "",
   email: "",
   phone: "",
-  category: "Portraits",
+  category: "Religious Art",
   message: "",
 };
 
@@ -16,6 +16,8 @@ const ContactForm = () => {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submittingVia, setSubmittingVia] = useState(null); // "whatsapp" | "email"
+  const [sentVia, setSentVia] = useState(null); // "whatsapp" | "email"
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,38 +36,62 @@ const ContactForm = () => {
     return Object.keys(next).length === 0;
   };
 
-  const buildWhatsAppMessage = () => {
-    const lines = [
-      "Hello Sandeep, I'd like to enquire about a commission.",
-      "",
-      `Name: ${form.name}`,
-    ];
+  const buildMessageLines = () => {
+    const lines = [`Name: ${form.name}`];
     if (form.email.trim()) lines.push(`Email: ${form.email}`);
     if (form.phone.trim()) lines.push(`Phone: ${form.phone}`);
     lines.push(`Interested In: ${form.category}`);
     lines.push("", `Message: ${form.message}`);
-    return lines.join("\n");
+    return lines;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const buildWhatsAppMessage = () =>
+    ["Hello Sandeep, I'd like to enquire about a commission.", "", ...buildMessageLines()].join(
+      "\n"
+    );
+
+  const buildEmailBody = () =>
+    ["Hello Sandeep,", "", "I'd like to enquire about a commission.", "", ...buildMessageLines()].join(
+      "\n"
+    );
+
+  const submitVia = (via) => {
     if (!validate()) return;
     setSubmitting(true);
+    setSubmittingVia(via);
 
-    // Opens WhatsApp with a pre-filled message containing the form details.
-    // Triggered inside the click handler (not after the timeout) so the
-    // browser doesn't block it as a popup.
-    const href = whatsappLink(buildWhatsAppMessage());
-    window.open(href, "_blank", "noopener,noreferrer");
+    // Opened inside the click handler (not after a timeout) so the browser
+    // doesn't block it as a popup.
+    if (via === "whatsapp") {
+      window.open(whatsappLink(buildWhatsAppMessage()), "_blank", "noopener,noreferrer");
+    } else {
+      window.location.href = mailtoLink(
+        `Commission Enquiry — ${form.category}`,
+        buildEmailBody()
+      );
+    }
 
     setTimeout(() => {
       setSubmitting(false);
+      setSubmittingVia(null);
+      setSentVia(via);
       setSubmitted(true);
       setForm(initialState);
     }, 600);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    submitVia("whatsapp");
+  };
+
+  const handleEmailClick = (e) => {
+    e.preventDefault();
+    submitVia("email");
+  };
+
   if (submitted) {
+    const isEmail = sentVia === "email";
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
@@ -74,12 +100,12 @@ const ContactForm = () => {
       >
         <CheckCircle2 size={48} className="text-gold" />
         <h3 className="font-display text-3xl text-cream">
-          Opening WhatsApp...
+          {isEmail ? "Opening Your Email App..." : "Opening WhatsApp..."}
         </h3>
         <p className="text-cream-faint font-light max-w-sm">
-          A WhatsApp tab has opened with your message pre-filled — just hit
-          send. If it didn't open, message us directly using the floating
-          WhatsApp button.
+          {isEmail
+            ? "A new email has been drafted with your message — just hit send. If it didn't open, email us directly at sandeeparts00@gmail.com."
+            : "A WhatsApp tab has opened with your message pre-filled — just hit send. If it didn't open, message us directly using the floating WhatsApp button."}
         </p>
         <button
           onClick={() => setSubmitted(false)}
@@ -180,7 +206,6 @@ const ContactForm = () => {
             onChange={handleChange}
             className="w-full bg-emerald-deep border border-gold/20 px-4 py-3.5 text-sm text-cream focus:border-gold outline-none transition-colors appearance-none"
           >
-            <option>Portraits</option>
             <option>Religious Art</option>
             <option>Blood Art</option>
             <option>Canvas Paintings</option>
@@ -213,37 +238,72 @@ const ContactForm = () => {
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="btn-gold mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
-      >
-        <AnimatePresence mode="wait">
-          {submitting ? (
-            <motion.span
-              key="loading"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex items-center gap-2"
-            >
-              <span className="w-4 h-4 border-2 border-emerald-deep/40 border-t-emerald-deep rounded-full animate-spin" />
-              Opening WhatsApp...
-            </motion.span>
-          ) : (
-            <motion.span
-              key="idle"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex items-center gap-2"
-            >
-              <Send size={16} />
-              Send via WhatsApp
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </button>
+      <div className="flex flex-col sm:flex-row gap-3 mt-2">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="btn-gold flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <AnimatePresence mode="wait">
+            {submittingVia === "whatsapp" ? (
+              <motion.span
+                key="loading-wa"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <span className="w-4 h-4 border-2 border-emerald-deep/40 border-t-emerald-deep rounded-full animate-spin" />
+                Opening WhatsApp...
+              </motion.span>
+            ) : (
+              <motion.span
+                key="idle-wa"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <Send size={16} />
+                Send via WhatsApp
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleEmailClick}
+          disabled={submitting}
+          className="btn-outline flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <AnimatePresence mode="wait">
+            {submittingVia === "email" ? (
+              <motion.span
+                key="loading-email"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <span className="w-4 h-4 border-2 border-gold/40 border-t-gold rounded-full animate-spin" />
+                Opening Email...
+              </motion.span>
+            ) : (
+              <motion.span
+                key="idle-email"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <Mail size={16} />
+                Send via Email
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
+      </div>
     </form>
   );
 };

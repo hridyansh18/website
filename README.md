@@ -106,11 +106,14 @@ npm run preview  # preview the production build locally
 
 ## 🔌 How the Contact Form Works
 
-`src/components/ContactForm.jsx` does **not** send email. On submit, it validates the fields, formats them into a message, and opens WhatsApp (`wa.me`) in a new tab with that message pre-filled, addressed to `siteConfig.whatsappNumber`. The visitor just has to hit send inside WhatsApp.
+`src/components/ContactForm.jsx` offers two submission paths, both fully client-side — no backend or API key needed:
 
-- No backend, API key, or `.env` file required — it's a client-side `window.open()` call.
-- To change which number receives these enquiries, edit `whatsappNumber` in `src/data/siteConfig.js`.
-- If you'd prefer real email instead (or in addition), connect `handleSubmit` in `ContactForm.jsx` to a backend endpoint or a service like Formspree / EmailJS — see the note on environment variables below.
+- **Send via WhatsApp** — opens `wa.me` in a new tab with the form details pre-filled as a message, addressed to `siteConfig.whatsappNumber`. The visitor just hits send inside WhatsApp.
+- **Send via Email** — opens the visitor's default email app via a `mailto:` link, addressed to `siteConfig.email`, with a pre-filled subject and body. The visitor hits send inside their email app. Note: `mailto:` only opens a compose window — it does not silently send email in the background, and it requires the visitor to have an email client configured (it may not open anything on a phone with no mail app set up).
+
+- No backend, API key, or `.env` file required for either option — both are client-side `window.open()` / `window.location.href` calls.
+- To change the number or email address these enquiries go to, edit `whatsappNumber` and `email` in `src/data/siteConfig.js`.
+- If you'd prefer a true backend-delivered email (sent silently, without relying on the visitor's own mail app), connect `submitVia` in `ContactForm.jsx` to a backend endpoint or a service like Formspree / EmailJS — see the note on environment variables below.
 
 ## 🔐 Environment Variables
 
@@ -126,6 +129,7 @@ If you add any of these, create a `.env` file at the project root, prefix variab
 
 ## 📝 Notes
 
-- Artwork images currently use Unsplash placeholder photography — swap these for real photographs of Sandeep's artwork before going live.
-- Lucide's icon set no longer ships trademarked brand glyphs (Instagram/Facebook/YouTube), so the footer's social icons use neutral stand-ins — swap in your own SVG brand marks if you need pixel-exact logos.
+- All artwork images are real photographed pieces by Sandeep Singh Parmar, optimized as JPEGs in `src/assets/images/artworks/`.
+- The favicon (`public/favicon*.png`, `favicon.ico`) and social-share preview image (`public/og-preview.jpg`) use the studio's real branded assets.
+- **Before going live**, update the `og:image` / `twitter:image` URLs in `index.html` (and `og:url` / `twitter:url` / canonical link) from `https://www.sandeepartgallery.com/...` to your actual deployed domain — until then, link previews on WhatsApp/social media won't be able to fetch the image.
 - All animations respect `prefers-reduced-motion`.

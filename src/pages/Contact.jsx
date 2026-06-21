@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import ContactForm from "../components/ContactForm";
-import { InstagramIcon } from "../components/SocialIcons";
+import { InstagramIcon, YoutubeIcon } from "../components/SocialIcons";
 import { siteConfig, whatsappLink } from "../data/siteConfig";
 
 const details = [
@@ -25,6 +25,11 @@ const details = [
     Icon: InstagramIcon,
     title: "Instagram",
     lines: [siteConfig.instagramHandle],
+  },
+  {
+    Icon: YoutubeIcon,
+    title: "YouTube",
+    lines: ["@Sandeeparts01"],
   },
   {
     Icon: Clock,
@@ -55,8 +60,8 @@ const Contact = () => {
               Send an Enquiry
             </h2>
             <p className="text-cream-faint text-sm font-light mb-8">
-              Fill out the form below — it opens WhatsApp with your message
-              ready to send, straight to the studio.
+              Fill out the form below, then send it straight to the studio
+              via WhatsApp or email — whichever you prefer.
             </p>
             <ContactForm />
           </motion.div>
@@ -112,6 +117,19 @@ const Contact = () => {
                           <a
                             key={line}
                             href={siteConfig.instagramUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block text-cream-faint text-sm font-light hover:text-gold transition-colors"
+                          >
+                            {line}
+                          </a>
+                        );
+                      }
+                      if (title === "YouTube") {
+                        return (
+                          <a
+                            key={line}
+                            href={siteConfig.youtubeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block text-cream-faint text-sm font-light hover:text-gold transition-colors"
