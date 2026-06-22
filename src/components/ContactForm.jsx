@@ -7,7 +7,7 @@ const initialState = {
   name: "",
   email: "",
   phone: "",
-  category: "Religious Art",
+  category: "Pencil Sketch",
   message: "",
 };
 
@@ -206,10 +206,10 @@ const ContactForm = () => {
             onChange={handleChange}
             className="w-full bg-emerald-deep border border-gold/20 px-4 py-3.5 text-sm text-cream focus:border-gold outline-none transition-colors appearance-none"
           >
+            <option>Pencil Sketch</option>
+            <option>Blood Sketch</option>
+            <option>Oil Painting</option>
             <option>Religious Art</option>
-            <option>Blood Art</option>
-            <option>Canvas Paintings</option>
-            <option>Pencil Sketches</option>
             <option>Something Custom</option>
           </select>
         </div>
