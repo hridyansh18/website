@@ -61,7 +61,7 @@ const Navbar = () => {
         </ul>
 
         <Link
-          to="/contact"
+          to="/commission"
           className="hidden lg:inline-flex btn-gold !py-2.5 !px-6 text-xs"
         >
           Book Commission

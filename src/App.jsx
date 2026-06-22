@@ -6,6 +6,8 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Gallery from "./pages/Gallery";
+import Commission from "./pages/Commission";
+import Pricing from "./pages/Pricing";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -36,6 +38,22 @@ const AnimatedRoutes = () => {
           element={
             <motion.div {...pageTransition}>
               <Gallery />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/commission"
+          element={
+            <motion.div {...pageTransition}>
+              <Commission />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/pricing"
+          element={
+            <motion.div {...pageTransition}>
+              <Pricing />
             </motion.div>
           }
         />

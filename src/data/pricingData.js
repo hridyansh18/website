@@ -3,8 +3,8 @@
 // Note: Advance payment required for booking. Delivery charges extra. Urgent orders chargeable.
 
 import gracefulSmile from "../assets/images/artworks/graceful-smile.jpg";
-import PortraitBloodArt from "../assets/images/artworks/blood-art-man.jpg";
-import maharanaPratap from "../assets/images/artworks/maharana-pratap.jpg";
+import sariPortraitBloodArt from "../assets/images/artworks/sari-portrait-blood-art.jpg";
+import krishnaWithRoses from "../assets/images/artworks/krishna-with-roses.jpg";
 
 export const artTypes = [
   {
@@ -28,7 +28,7 @@ export const artTypes = [
     tagline: "Rare pigment, unrepeatable art",
     icon: "🩸",
     accentColor: "#C0392B",
-    image: PortraitBloodArt,
+    image: sariPortraitBloodArt,
     pricing: [
       { size: "A4",    faces: "Single Face",   price: 1000 },
       { size: "A3",    faces: "Single Face",   price: 1500 },
@@ -50,7 +50,7 @@ export const artTypes = [
     tagline: "Colour portrait in rich oils",
     icon: "🎨",
     accentColor: "#D4AF37",
-    image: maharanaPratap,
+    image: krishnaWithRoses,
     pricing: [
       { size: "A4",    faces: "Single Face",   price: 1500 },
       { size: "A3",    faces: "Single Face",   price: 2200 },

@@ -20,7 +20,7 @@ export const categories = [
   { id: "all", label: "All Works" },
   { id: "religious", label: "Religious Art" },
   { id: "blood-art", label: "Blood Art" },
-  { id: "canvas", label: "Canvas Paintings" },
+  { id: "oil-paintings", label: "Oil Paintings" },
   { id: "sketches", label: "Pencil Sketches" },
 ];
 
@@ -80,8 +80,8 @@ export const artworks = [
   {
     id: 5,
     title: "Krishna Among the Roses",
-    category: "canvas",
-    categoryLabel: "Canvas Paintings",
+    category: "oil-paintings",
+    categoryLabel: "Oil Paintings",
     medium: "Acrylic on Canvas",
     year: "2024",
     size: "20in x 24in",
@@ -93,8 +93,8 @@ export const artworks = [
   {
     id: 6,
     title: "Maharana Pratap",
-    category: "canvas",
-    categoryLabel: "Canvas Paintings",
+    category: "oil-paintings",
+    categoryLabel: "Oil Paintings",
     medium: "Watercolor on Canvas",
     year: "2024",
     size: "18in x 26in",
