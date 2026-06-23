@@ -1,167 +1,188 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { MessageCircle, Info } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { artTypes } from "../data/pricingData";
+import { whatsappLink, siteConfig } from "../data/siteConfig";
 
-const PricingTable = ({ art }) => {
-  const startingPrice = Math.min(...art.pricing.map((item) => item.price));
+// Icon SVG for each art type
+const ArtIcon = ({ id }) => {
+  if (id === "pencil")
+    return (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.5]">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+      </svg>
+    );
+  if (id === "blood")
+    return (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.5]">
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+      </svg>
+    );
+  return (
+    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.5]">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <line x1="9" y1="9" x2="9.01" y2="9" strokeLinecap="round" strokeWidth="2.5" />
+      <line x1="15" y1="9" x2="15.01" y2="9" strokeLinecap="round" strokeWidth="2.5" />
+    </svg>
+  );
+};
+
+// One rate card column
+const RateCard = ({ art, index }) => {
+  const startingPrice = Math.min(...art.pricing.map((p) => p.price));
+
+  const orderMessage = [
+    `Hello Sandeep! I'd like to order a *${art.name}*.`,
+    "",
+    `🎨 Art Type: ${art.name}`,
+    "Please let me know the available sizes and guide me further.",
+  ].join("\n");
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="border border-gold/20 bg-emerald-rich/40 overflow-hidden"
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="flex flex-col border border-gold/20 bg-emerald-rich overflow-hidden"
     >
-      {/* Artwork Image */}
-
-      {/* Header */}
-      <div className="p-6 border-b border-gold/15">
-        <h2 className="font-display text-2xl sm:text-3xl text-cream">
-          {art.name}
-        </h2>
-
-        {art.tagline && (
-          <p className="text-cream-faint text-sm mt-1">
-            {art.tagline}
-          </p>
-        )}
+      {/* Card header */}
+      <div className="p-5 sm:p-6 border-b border-gold/15">
+        <div className="flex items-center gap-3 mb-1">
+          <span className="w-9 h-9 rounded-full border border-gold/40 flex items-center justify-center text-gold shrink-0">
+            <ArtIcon id={art.id} />
+          </span>
+          <h2 className="font-display text-xl sm:text-2xl text-cream leading-tight">
+            {art.name}
+          </h2>
+        </div>
+        <p className="text-cream-faint text-xs font-light mt-1 ml-12">
+          — Charges —
+        </p>
       </div>
 
-      {/* Table Header */}
-      <div className="grid grid-cols-3 px-6 py-4 border-b border-gold/10">
-        <span className="eyebrow text-[10px]">SIZE</span>
-        <span className="eyebrow text-[10px]">FACES</span>
-        <span className="eyebrow text-[10px] text-right">CHARGES</span>
-      </div>
-
-      {/* Table Rows */}
-      {art.pricing.map((row) => (
-        <div
-          key={`${row.size}-${row.faces}`}
-          className="grid grid-cols-3 px-6 py-4 border-b border-gold/10 hover:bg-gold/5 transition-colors"
-        >
-          <span className="text-cream text-sm">{row.size}</span>
-
-          <span className="text-cream-dim text-sm">{row.faces}</span>
-
-          <span className="text-gold text-sm font-medium text-right">
-            ₹{row.price.toLocaleString("en-IN")}
+      {/* Rate table */}
+      <div className="flex-1 px-5 sm:px-6 py-4">
+        {/* Table header */}
+        <div className="grid grid-cols-3 pb-2 border-b border-gold/20 mb-1">
+          <span className="text-[10px] uppercase tracking-widest2 text-gold font-medium">
+            Size
+          </span>
+          <span className="text-[10px] uppercase tracking-widest2 text-gold font-medium text-center">
+            Faces
+          </span>
+          <span className="text-[10px] uppercase tracking-widest2 text-gold font-medium text-right">
+            Charges
           </span>
         </div>
-      ))}
 
-      {/* Footer */}
-      <div className="bg-gold/5 border-t border-gold/10 px-5 py-4 text-center">
-        <p className="text-xs text-gold">
-          Starting at ₹{startingPrice.toLocaleString("en-IN")}
-        </p>
+        {/* Rows */}
+        {art.pricing.map((row, i) => (
+          <div
+            key={`${row.size}-${row.faces}`}
+            className={`grid grid-cols-3 py-2.5 border-b border-gold/8 last:border-0 ${
+              i % 2 === 0 ? "" : "bg-emerald-deep/30"
+            }`}
+          >
+            <span className="text-cream-dim text-xs sm:text-sm font-light">
+              {row.size}
+            </span>
+            <span className="text-cream-dim text-xs sm:text-sm font-light text-center">
+              {row.faces}
+            </span>
+            <span className="text-gold font-medium text-xs sm:text-sm text-right">
+              ₹{row.price.toLocaleString("en-IN")}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Starting price + WhatsApp button */}
+      <div className="p-5 sm:p-6 border-t border-gold/15 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <span className="text-cream-faint text-xs font-light">Starting at</span>
+          <span className="font-display text-2xl text-gold">
+            ₹{startingPrice.toLocaleString("en-IN")}
+          </span>
+        </div>
+        <a
+          href={whatsappLink(orderMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-gold w-full justify-center"
+        >
+          <MessageCircle size={15} />
+          Order on WhatsApp
+        </a>
       </div>
     </motion.div>
   );
 };
 
+// Main page
 const Pricing = () => {
-  const [openArt, setOpenArt] = useState(null);
+  const generalMessage = [
+    "Hello Sandeep! I'd like to place an order.",
+    "",
+    "Please share the available options and guide me.",
+  ].join("\n");
 
   return (
     <>
       <PageHeader
-        eyebrow="Sandeep Arts"
-        title="Pricing for Every Medium"
-        description="Transparent pricing across Pencil Sketches, Blood Art, and Oil Painting Portraits."
+        eyebrow="Commission Charges"
+        title="Pricing & Rate Card"
+        description="Simple, transparent pricing across all three art styles. Pick your type and order directly on WhatsApp."
       />
 
+      {/* 3 Rate Cards */}
       <section className="section-pad !pt-14 bg-emerald-deep relative">
         <div className="absolute inset-0 bg-radial-glow opacity-30" />
 
-        <div className="relative grid gap-8 lg:grid-cols-3">
-          {artTypes.map((art) => (
-            <PricingTable key={art.id} art={art} />
-          ))}
-        </div>
-      </section>
-
-      {/* Fine print */}
-      <section className="bg-emerald-rich border-t border-gold/15 px-6 sm:px-10 lg:px-20 py-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gold text-xs tracking-[0.25em] uppercase mb-3">
-            Important Information
-          </p>
-
-          <p className="text-cream-faint/70 text-sm font-light leading-relaxed">
-            Advance payment required for booking. Delivery charges extra.
-            Urgent orders are chargeable. All prices are inclusive of
-            standard packaging.
-          </p>
-        </div>
-      </section>
-
-
-      {/* CTA */}
-      <section className="section-pad !py-20 bg-emerald-deep relative">
-        <div className="absolute inset-0 bg-radial-glow" />
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="relative flex flex-col items-center text-center gap-6"
-        >
-          <span className="eyebrow">Ready to Order?</span>
-          <h2 className="font-display text-4xl sm:text-5xl text-cream max-w-xl leading-tight">
-            Book your commission today.
-          </h2>
-          <div className="flex flex-col sm:flex-row gap-4 mt-2">
-            <Link to="/commission" className="btn-outline group">
-              Learn About the Process
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+        <div className="relative flex flex-col gap-10">
+          {/* Cards grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {artTypes.map((art, i) => (
+              <RateCard key={art.id} art={art} index={i} />
+            ))}
           </div>
-        </motion.div>
-      </section>
 
-      <PricingLightbox artType={openArt} onClose={() => setOpenArt(null)} />
-    </>
-  );
-};
+          {/* Fine print */}
+          <div className="flex items-start gap-3 border border-gold/15 p-4 sm:p-5 bg-emerald-rich max-w-3xl mx-auto w-full">
+            <Info size={15} className="text-gold shrink-0 mt-0.5" />
+            <p className="text-cream-faint/80 text-xs sm:text-sm font-light leading-relaxed">
+              <span className="text-cream font-medium">Note:</span> Advance payment
+              required for booking. Delivery charges extra. Urgent orders are
+              chargeable. Custom background available on request.
+            </p>
+          </div>
 
-// Simple lightbox/modal for showing a selected art type details
-const PricingLightbox = ({ artType, onClose }) => {
-  if (!artType) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-emerald-rich border border-gold/20 w-full max-w-2xl p-6 rounded">
-        <div className="flex justify-between items-start mb-4">
-          <h3 className="font-display text-xl text-cream">{artType.name}</h3>
-          <button onClick={onClose} className="text-cream-faint">Close</button>
-        </div>
-
-        <img src={artType.image} alt={artType.name} className="w-full h-48 object-cover mb-4" />
-
-        {artType.tagline && <p className="text-cream-faint mb-3">{artType.tagline}</p>}
-
-        <div className="grid grid-cols-3 gap-2">
-          <span className="eyebrow text-[10px]">SIZE</span>
-          <span className="eyebrow text-[10px]">FACES</span>
-          <span className="eyebrow text-[10px] text-right">CHARGES</span>
-        </div>
-
-        <div className="mt-2">
-          {artType.pricing.map((row) => (
-            <div key={`${row.size}-${row.faces}`} className="grid grid-cols-3 py-2 border-b border-gold/10">
-              <span className="text-cream">{row.size}</span>
-              <span className="text-cream-dim">{row.faces}</span>
-              <span className="text-gold text-right">₹{row.price.toLocaleString('en-IN')}</span>
+          {/* Contact strip */}
+          <div className="border border-gold/20 bg-emerald-rich p-5 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-3xl mx-auto w-full">
+            <div className="text-center sm:text-left">
+              <p className="eyebrow mb-1">Any questions?</p>
+              <p className="font-display text-2xl sm:text-3xl text-cream">
+                Chat directly with Sandeep
+              </p>
+              <p className="text-cream-faint text-sm font-light mt-1">
+                {siteConfig.instagramHandle} &nbsp;|&nbsp; {siteConfig.phones[0].display}
+              </p>
             </div>
-          ))}
+            <a
+              href={whatsappLink(generalMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-gold shrink-0"
+            >
+              <MessageCircle size={16} />
+              WhatsApp Now
+            </a>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
 
