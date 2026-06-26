@@ -173,6 +173,14 @@ const Contact = () => {
               </div>
             </a>
 
+            <div className="border border-gold/15 overflow-hidden h-56 lg:h-full min-h-[200px]">
+              <iframe
+                title="Studio location map"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=75.84%2C22.69%2C75.92%2C22.75&layer=mapnik"
+                className="w-full h-full grayscale contrast-125 opacity-80"
+                loading="lazy"
+              />
+            </div>
           </motion.div>
         </div>
       </section>

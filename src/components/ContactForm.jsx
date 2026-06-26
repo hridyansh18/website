@@ -85,6 +85,10 @@ const ContactForm = () => {
     submitVia("whatsapp");
   };
 
+  const handleEmailClick = (e) => {
+    e.preventDefault();
+    submitVia("email");
+  };
 
   if (submitted) {
     const isEmail = sentVia === "email";
@@ -267,6 +271,38 @@ const ContactForm = () => {
           </AnimatePresence>
         </button>
 
+        <button
+          type="button"
+          onClick={handleEmailClick}
+          disabled={submitting}
+          className="btn-outline flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <AnimatePresence mode="wait">
+            {submittingVia === "email" ? (
+              <motion.span
+                key="loading-email"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <span className="w-4 h-4 border-2 border-gold/40 border-t-gold rounded-full animate-spin" />
+                Opening Email...
+              </motion.span>
+            ) : (
+              <motion.span
+                key="idle-email"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <Mail size={16} />
+                Send via Email
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
       </div>
     </form>
   );

@@ -5,30 +5,6 @@ import { artTypes } from "../data/pricingData";
 import { whatsappLink, siteConfig } from "../data/siteConfig";
 
 // Icon SVG for each art type
-const ArtIcon = ({ id }) => {
-  if (id === "pencil")
-    return (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.5]">
-        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-      </svg>
-    );
-  if (id === "blood")
-    return (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.5]">
-        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-      </svg>
-    );
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.5]">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-      <line x1="9" y1="9" x2="9.01" y2="9" strokeLinecap="round" strokeWidth="2.5" />
-      <line x1="15" y1="9" x2="15.01" y2="9" strokeLinecap="round" strokeWidth="2.5" />
-    </svg>
-  );
-};
-
 // One rate card column
 const RateCard = ({ art, index }) => {
   const startingPrice = Math.min(...art.pricing.map((p) => p.price));
@@ -50,15 +26,10 @@ const RateCard = ({ art, index }) => {
     >
       {/* Card header */}
       <div className="p-5 sm:p-6 border-b border-gold/15">
-        <div className="flex items-center gap-3 mb-1">
-          <span className="w-9 h-9 rounded-full border border-gold/40 flex items-center justify-center text-gold shrink-0">
-            <ArtIcon id={art.id} />
-          </span>
-          <h2 className="font-display text-xl sm:text-2xl text-cream leading-tight">
-            {art.name}
-          </h2>
-        </div>
-        <p className="text-cream-faint text-xs font-light mt-1 ml-12">
+        <h2 className="font-display text-xl sm:text-2xl text-cream leading-tight">
+          {art.name}
+        </h2>
+        <p className="text-cream-faint text-xs font-light mt-1">
           — Charges —
         </p>
       </div>
