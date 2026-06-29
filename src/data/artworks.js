@@ -19,7 +19,7 @@ import couplePortrait from "../assets/images/artworks/couple-portrait.png";
 import motherPortrait from "../assets/images/artworks/mother.png";
 import youngManSketch from "../assets/images/artworks/youngMan.png";
 import traditionalWoman from "../assets/images/artworks/traditionalWoman.png";
-import muslimCouple from "../assets/images/artworks/muslimCouple.png";
+import happyCouple from "../assets/images/artworks/happyCouple.png";
 import traditionalGirl from "../assets/images/artworks/traditionalGirl.png";
 import modernGirl from "../assets/images/artworks/modernGirl.png";
 import smilingLady from "../assets/images/artworks/smilingLady.png";
@@ -236,7 +236,7 @@ export const artworks = [
   medium: "Blood on Paper",
   year: "2025",
   size: '18" × 24"',
-  image: muslimCouple,
+  image: happyCouple,
   orientation: "portrait",
   description:
     "A customized blood portrait celebrating togetherness with realistic detailing and expressive smiles.",
