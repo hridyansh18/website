@@ -34,7 +34,7 @@ export const artTypes = [
       { size: "A3",    faces: "Single Face",   price: 1500 },
       { size: "A3",    faces: "Double Face",   price: 2000 },
       { size: "12×18", faces: "Single Face",   price: 2500 },
-      { size: "12×18", faces: "Triple Face",   price: 3000 },
+      { size: "12×18", faces: "Double Face",   price: 3000 },
       { size: "18×24", faces: "Single Face",   price: 4000 },
       { size: "18×24", faces: "Double Face",   price: 4800 },
       { size: "18×24", faces: "Multiple Face", price: 5000 },
